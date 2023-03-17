@@ -6,6 +6,14 @@ from datetime import date
 import pandas as pd
 st.set_page_config(page_title="Submit break",page_icon="coffee",layout="wide")
 
+@st.cache(allow_output_mutation=True, suppress_st_warning = True)
+def get_manager():
+    return stx.CookieManager()
+
+cookie_manager = get_manager()
+cookie_manager.get_all()
+
+
 
 #--------------------------------------- submit a complete coffee break ----------------------------------------------
 def submit_break(persons,coffees,date_br):					# submitting break into database
