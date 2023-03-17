@@ -156,6 +156,78 @@ def add_coffee_to_break(id_ext, name):
 	db.close()
 
 
+user_data=get_user_data()
+
+
+if 'logged_in' not in st.session_state:
+    st.session_state.logged_in=cookie_manager.get(cookie="logged_in")
+if 'user_name' not in st.session_state:
+    st.session_state.user_name=cookie_manager.get(cookie="user")
+if 'admin' not in st.session_state:
+    st.session_state.admin=cookie_manager.get(cookie="status")
+if 'attempt' not in st.session_state:
+    st.session_state.attempt="false"
+    
+    
+if cookie_manager.get(cookie="logged_in") == "true":
+    st.session_state.logged_in="true"
+    st.session_state.user_name = cookie_manager.get(cookie="user")
+    st.session_state.admin=cookie_manager.get(cookie="status")
+
+logged_in=st.session_state.logged_in
+logged_in_user=st.session_state.user_name
+admin_status=st.session_state.admin
+
+
+#---------------------------- login function
+#@st.cache(suppress_st_warning=True)
+def check_login(user, user_pw):                         #login check
+    login_check=False
+    user_data=get_user_data()
+    for i in range(len(user_data)):
+         if user == user_data[i][0] and user_pw == user_data[i][1]:
+            login_check = True
+            admin_status=user_data[i][2]
+    if login_check == True:
+        st.success("You have successfully logged into the coffee list!")
+        st.session_state.logged_in = "true"
+        st.session_state.user_name = user
+        st.session_state.admin = str(admin_status)
+        st.session_state.attempt = "false"
+        if remember:
+            cookie_manager.set("logged_in", True, expires_at=datetime.datetime(year=2030, month=1, day=1), key="logged_in_true")
+            cookie_manager.set("user", user, expires_at=datetime.datetime(year=2030, month=1, day=1), key="logged_in_user")
+            cookie_manager.set("status", admin_status, expires_at=datetime.datetime(year=2030, month=1, day=1), key="admin_status")
+        else:
+            cookie_manager.set("logged_in", False, expires_at=datetime.datetime(year=2030, month=1, day=1), key="logout")
+            cookie_manager.set("status", None, expires_at=datetime.datetime(year=2030, month=1, day=1), key="del_admin_status")
+            cookie_manager.set("user", None, expires_at=datetime.datetime(year=2030, month=1, day=1), key="logged_in_user")            
+    else:
+        st.warning("Incorrect username/password.")
+        st.session_state.attempt="true"
+        st.session_state.logged_in = "false"
+        st.session_state.user_name = ""
+        st.session_state.admin = "0"
+        #cookie_manager.set("logged_in", False, expires_at=datetime.datetime(year=2030, month=1, day=1), key="logged_in_false")
+        #cookie_manager.delete("user")
+        logged_in = "false"
+ 
+#---------------------------- logout function
+#@st.cache(suppress_st_warning=True)       
+def logout_check():
+    cookie_manager.set("logged_in", "false", expires_at=datetime.datetime(year=2030, month=1, day=1), key="logout")
+    cookie_manager.set("status", None, expires_at=datetime.datetime(year=2030, month=1, day=1), key="del_admin_status")
+    cookie_manager.set("user", None, expires_at=datetime.datetime(year=2030, month=1, day=1), key="logged_in_user")
+    st.session_state.attempt="false"
+    st.session_state.logged_in = "false"
+    st.session_state.user_name = None
+    st.session_state.admin = None
+    logged_in = "false"
+	
+	
+	
+	
+	
 
 ########################################################################################################################################################################
 #####################################################    MAIN    #######################################################################################################
