@@ -7,7 +7,7 @@ import pandas as pd
 st.set_page_config(page_title="Coffee list",page_icon="coffee",layout="wide")
 
 
-#--------------------------------------- submit a complete coffee break ----------------------------------------------
+#--------------------------------------- submit a complete coffee break ---------------------------------------------
 def submit_break(persons,coffees,date_br):					# submitting break into database
 	db = init_connection()
 	cursor = db.cursor(buffered=True)
