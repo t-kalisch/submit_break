@@ -198,7 +198,7 @@ def check_login(user, user_pw):                         #login check
             login_check = True
             admin_status=user_data[i][2]
     if login_check == True:
-        st.success("You have successfully logged into the coffee list!")
+        st.success("Login successfull")
         st.session_state.logged_in = "true"
         st.session_state.user_name = user
         st.session_state.admin = str(admin_status)
