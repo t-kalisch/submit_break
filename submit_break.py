@@ -93,12 +93,12 @@ def add_coffee_to_break_check(id_ext, coffee_name, logged_in_user):
     add_coffee_to_break(id_ext, coffee_name, logged_in_user)		
 
 #---------------------------------- add coffee to existing coffee break ---------------------------------------------------
-def add_coffee_to_break(id_ext, name, user):
+def add_coffee_to_break(id_ext, name):
 	db = init_connection()
 	cursor = db.cursor(buffered=True)
 	names = get_members()
 	if name == "":
-		name = user
+		st.error("Error: Please enter a drinker to add a coffee to a break.")
 	cursor.execute("select persons, coffees from drinkers where id_ext = '"+id_ext+"'")
 	#st.write(cursor.fetchall())
 	drinker_data=list(cursor.fetchall()[0])
@@ -200,7 +200,7 @@ last_breaks=get_last_breaks(10)
 col1, col2, col3 = st.columns([1,1,3])
 id_ext = col1.text_input("Extended ID", placeholder=last_breaks[len(last_breaks)-1][0])
 coffee_name = col2.text_input("Username", placeholder="User")
-col1.button("Add coffee", on_click=add_coffee_to_break_check, args=(id_ext, coffee_name, st.session_state.user_name))
+col1.button("Add coffee", on_click=add_coffee_to_break_check, args=(id_ext, coffee_name))
 df=pd.DataFrame(last_breaks,columns=['Extended ID','Date','Drinkers','Coffees'])
 col3.markdown("Last 10 breaks")
 col3.dataframe(df, width=600, height=400)
